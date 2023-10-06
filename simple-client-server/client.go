@@ -7,19 +7,19 @@ import (
 	"os"
 )
 
+func read(conn net.Conn) {
+	reader := bufio.NewReader(conn)
+	msg, _ := reader.ReadString('\n')
+	fmt.Printf(msg)
+}
+
 func main() {
-	// Prompt the user for a message
 	fmt.Print("Enter the message: ")
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	msg := scanner.Text()
 
-	conn, err := net.Dial("tcp", "127.0.0.1:8030")
-	if err != nil {
-		fmt.Println("Error connecting to the server:", err)
-		return
-	}
-	defer conn.Close()
-
+	conn, _ := net.Dial("tcp", "127.0.0.1:8030")
 	fmt.Fprintln(conn, msg)
+	read(conn)
 }
